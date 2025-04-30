@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>background.png</file>
+        <file>New Super Mario Bros_ 2 art.jpg</file>
+    </qresource>
+</RCC>
