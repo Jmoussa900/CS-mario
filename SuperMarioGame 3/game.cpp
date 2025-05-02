@@ -88,7 +88,7 @@ void Game::createObstacle(int num)
     }
     if(num==2 && zoombie){
         scene->addItem(zoombie);
-        zoombie->setPos(450, 300);
+        zoombie->setPos(550, 300);
         zoombie->setZValue(10);
     }
 }

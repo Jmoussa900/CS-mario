@@ -2,5 +2,6 @@
     <qresource prefix="/images">
         <file>background.png</file>
         <file>New Super Mario Bros_ 2 art.jpg</file>
+        <file>zoombie.jpg</file>
     </qresource>
 </RCC>
