@@ -4,13 +4,18 @@
 #include <QObject>
 #include "bullet.h"
 #include <QTimer>
+
 class Monster: public QObject , public QGraphicsPixmapItem
 {
     Q_OBJECT
 public:
     Monster(QGraphicsItem* parent = 0);
     void shoot();
-
+    void setStop();
+    void timer();
+private:
+    QTimer * shootTimer;
+    bool stop;
 };
 
 

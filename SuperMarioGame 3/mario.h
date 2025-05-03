@@ -12,6 +12,7 @@
 #include <QPixmap>
 #include <QMessageBox>
 #include "recobstacles.h"
+
 using namespace std;
 
 class Mario: public QObject, public QGraphicsPixmapItem
@@ -24,12 +25,9 @@ public:
     void setMario(int w, int h);
     int getHealth();
     void setHealth();
-    bool getCollides();
     void setScore();
     int getWidth();
     int getHeight();
-    void setWidth(int w);
-    void setHeight(int h);
     int getScore();
 
 public:
@@ -38,18 +36,19 @@ public slots:
     void createEnemy();
     void updatePosition();
     void enemyAvoided();
+    void setLevel(int l);
 signals:
     void lifeEnded();
 private:
     int maxLife;
     int health;
+    int level;
     int width,height;
     int pos_y;
     int score;
     QGraphicsTextItem * info;
     int velocityY;
     bool isJumping;
-    bool collides;
     QTimer * timer;
 };
 

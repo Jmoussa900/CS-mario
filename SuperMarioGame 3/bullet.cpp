@@ -1,7 +1,7 @@
 #include"bullet.h"
-#include <QGraphicsScene>
 #include <QTimer>
 #include <QList>
+
 Bullet::Bullet() {
     // *******  Setting the bullets' size ********
     setRect(0,0,10,20);
@@ -16,6 +16,7 @@ Bullet::Bullet() {
     connect(timer, SIGNAL(timeout()),this,SLOT (move()));
     timer->start(50);
 }
+
 
 // Move function is used to 1-  move the bullet upwards
 // 2- Handle the collision of the bullets with enemies
@@ -34,18 +35,18 @@ void Bullet:: move()
         while ((enemy) && (enemy->getHealth()>0)) {
             enemy->setScore();
             scene()->removeItem(this);
-            enemy->setHeight(enemy->getHeight()/2);
-            enemy->setWidth(enemy->getWidth()/2);
-            enemy->setMario((enemy->getWidth()),(enemy->getHeight()));
+           // enemy->setHeight(enemy->getHeight()/2);
+            //enemy->setWidth(enemy->getWidth()/2);
+           // enemy->setMario((enemy->getWidth()),(enemy->getHeight()));
             enemy->setHealth();
             this->deleteLater();// from chatgpt
             break;
             qDebug() << "Bullet hit something, deleting...";
         }
-        if(enemy->getHealth()<1){
+       // if(enemy->getHealth()<1){
 
-            enemy->emit lifeEnded();
-        }
+         //   enemy->emit lifeEnded();
+        //}
     }
     // if there was no collision with an Enemy, move the bullet to the left
     setPos(x()-10,y());

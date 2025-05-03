@@ -2,6 +2,7 @@
 Mario::Mario(QGraphicsItem * parent) {
     width=100;
     height=100;
+    level=1;
     pos_y=400;
     maxLife=5;
     health=3;
@@ -21,7 +22,7 @@ void Mario::TheInfo(){    //Function that provides all of the info about mario
     info=new QGraphicsTextItem;
     info->setFont(QFont("times",25));
     info->setDefaultTextColor(Qt::black);
-    info->setPlainText("Health: "+QString::number(health)+ "   Life: "+QString::number(maxLife)+"   Level: 1"+"   Score: "+QString::number(score));
+    info->setPlainText("Health: "+QString::number(health)+ "   Life: "+QString::number(maxLife)+"   Level: "+QString::number(level)+"   Score: "+QString::number(score));
     info->setPos(350,50);
     scene()->addItem(info);
 }
@@ -35,15 +36,6 @@ void Mario::setMario(int w, int h) //function that creates and changes the size 
     setPos(x(),pos_y); //returns mario right where he was hit regardless where the scene is
 }
 
-int Mario::getHealth()
-{
-    return health;
-}
-
-void Mario::setHealth()
-{
-    health--;
-}
 
 void Mario::Collision(){ //function that checks for the collision between mario and the obstacles
     QList<QGraphicsItem *> collidedItems = collidingItems();
@@ -54,32 +46,7 @@ void Mario::Collision(){ //function that checks for the collision between mario 
             scene()->removeItem(enemy);
             delete enemy;
             score-=10;
-            if(health>=1){
-                health--;
-                pos_y+=20;
-                width *= 0.8;
-                height *= 0.8;
-                setMario(width,height);
-                TheInfo();
-                //info->setPlainText("Health: "+QString::number(health)+ "   Life: "+QString::number(maxLife)+"   Level: 1"+"   Score: "+QString::number(score));
-            }
-            if(health==0){
-            health = 3;  // Reset health
-            maxLife--;   // Decrease total lives
-            TheInfo();
-            width=100;
-            height=100;
-            pos_y=400;
-            setMario(width,height);
-            emit lifeEnded();
-            //info->setPlainText("Health: "+QString::number(health)+ "   Life: "+QString::number(maxLife)+"   Level: 1"+"   Score: "+QString::number(score));
-            }
-
-            if (maxLife <= 0) {
-                QMessageBox::information(nullptr,"END","Game Over!!! Try again later");
-                QTimer::singleShot(200, qApp, &QCoreApplication::quit);
-                //emit gameOver();  // Signal for complete game over
-            }
+            setHealth();
             return;
            // if (health <= 0) {
              //   maxLife--;
@@ -130,12 +97,19 @@ void Mario::keyPressEvent(QKeyEvent *event)
     }
 
 }
+
 void Mario::enemyAvoided() { //increase the score anytime mario passes an obstacle successfully
     score += 10;
     info->setPlainText("Health: " + QString::number(health) +
                        "   Life: " + QString::number(maxLife) +
                       "   Level: 1" +
                       "   Score: " + QString::number(score));
+}
+
+void Mario::setLevel(int l)
+{
+    level=l;
+    TheInfo();
 }
 
 void Mario::updatePosition() {
@@ -155,14 +129,12 @@ void Mario::updatePosition() {
     Collision();
 }
 
-bool Mario::getCollides(){
-    return collides;
-}
 
 void Mario::setScore()
 {
     score-=100;
     pos_y+=30;
+    TheInfo();
 }
 
 int Mario::getWidth()
@@ -173,21 +145,41 @@ int Mario::getHeight(){
     return height;
 }
 
-void Mario::setWidth(int w)
-{
-    width=w;
-}
-
-void Mario::setHeight(int h)
-{
-    height=h;
-}
-
 int Mario::getScore()
 {
     return score;
 }
 
+int Mario::getHealth()
+{
+    return health;
+}
+
+void Mario::setHealth()
+{
+    if(health>=1){
+        health--;
+        pos_y+=20;
+        width *= 0.8;
+        height *= 0.8;
+        setMario(width,height);
+        TheInfo();
+    }
+    if(health==0){
+        health = 3;  // Reset health
+        maxLife--;   // Decrease total lives
+        TheInfo();
+        width=100;
+        height=100;
+        pos_y=400;
+        setMario(width,height);
+        emit lifeEnded();}
+
+    if (maxLife == 0) {
+        QMessageBox::information(nullptr,"END","Game Over!!! Try again later");
+        QTimer::singleShot(200, qApp, &QCoreApplication::quit);
+    }
+}
 //CreateEnemy function used to create the obstacles
 /*void Mario::createEnemy()
 { RecObstacles* enemy = new RecObstacles();

@@ -21,7 +21,7 @@ Game::Game(QWidget *parent){
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
     mario->TheInfo();
-    createObstacle(1);
+    //createObstacle(level);
     //created a timer that runs every 3000 millisecond to release the obstacles
     obstacleTimer = new QTimer();
     connect(obstacleTimer, &QTimer::timeout, this, [this]() {
@@ -34,13 +34,10 @@ Game::Game(QWidget *parent){
 
     levelTimer = new QTimer(this);
     connect(levelTimer, &QTimer::timeout, this, &Game::checkLevelCompletion);
-    levelTimer->start(50000);
+    levelTimer->start(20000);
 
-    if(mario->getCollides()){
-        scene->clear();
-        QCoreApplication::quit();
-        qApp->exit();
-    }
+
+
     zoombie=new Monster();
     //zoombie->setPos(550, 300);
     //scene->addItem(zoombie);
@@ -48,7 +45,7 @@ Game::Game(QWidget *parent){
 
 };
 
-void Game::keyPressEvent(QKeyEvent *event) {
+void Game::keyPressEvent(QKeyEvent *event) {  //Make the info boc move with the health
     mario->keyPressEvent(event); // Let Mario handle movement
     centerOn(mario);             // Center view to Mario
 
@@ -56,20 +53,21 @@ void Game::keyPressEvent(QKeyEvent *event) {
 }
 
 
-void Game::endGame()
-{
-    QMessageBox::information(nullptr,"END","Game Over!!! Try again later");
-    Game();
-}
+//void Game::endGame()
+//{
+  //  QMessageBox::information(nullptr,"END","Game Over!!! Try again later");
+  //  Game();
+//}
 
 
 
 void Game::levelEnded()
 {
+    emptyScene();
     QMessageBox::information(nullptr,"End of Level", "Level was not finished successfully \nTry again");
     mario->setMario(100,100);
     mario->TheInfo();
-    levelTimer->start(50000);
+    levelTimer->start(20000);
 }
 
 void Game::checkLevelCompletion()
@@ -77,8 +75,7 @@ void Game::checkLevelCompletion()
     if(mario->getHealth()>0){
         nextLevel();
     }
-    levelTimer->stop();     // Stop the timer until next level starts
-
+ // levelTimer->stop();     // Stop the timer until next level starts
 }
 
 void Game::createObstacle(int num)
@@ -86,20 +83,35 @@ void Game::createObstacle(int num)
     if(num==1){
         mario->createEnemy();
     }
-    if(num==2 && zoombie){
+  else  if(num==2 && zoombie){
         scene->addItem(zoombie);
-        zoombie->setPos(550, 300);
+        zoombie->setPos(550,300);
         zoombie->setZValue(10);
+        zoombie->timer();
+    }
+   else if(num==3){
+        QMessageBox::information(nullptr,"END","Congrulatulations Game has ended \n Your Score: "+QString::number(mario->getScore()));
+        obstacleTimer->stop();
     }
 }
 
 void Game::nextLevel()
 {
-    QMessageBox::information(nullptr,"Congrtulations", "You have successfully finished Level "+ QString::number(level++) +" \nThe next Level will open now \n Score: "+QString::number(mario->getScore()));
-    levelTimer->start(50000);//reset the timer for the next level
+    emptyScene();
+    QMessageBox::information(nullptr,"Congrtulations", "You have successfully finished Level "+ QString::number(level) +" \nThe next Level will open now \n Score: "+QString::number(mario->getScore()));
+    levelTimer->start(20000);//reset the timer for the next level
+    mario->setLevel(++level);
     connect(obstacleTimer, &QTimer::timeout, this, [this]() {
                             this->createObstacle(level);
                              });
+}
+
+void Game::emptyScene()
+{
+ if(level==2){
+        zoombie->setStop();
+        scene->removeItem(zoombie);
+    }
 }
 
 Game::~Game()

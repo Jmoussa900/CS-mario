@@ -7,16 +7,18 @@
 #include "monster.h"
 #include <QTimer>
 #include <QMessageBox>
-#include <iostream>
 using namespace std;
+
 class Game:public QGraphicsView{
     Q_OBJECT
 public:
     Game(QWidget * parent=0);
-    void endGame();
+    //void endGame();
     void createObstacle(int num);
     void nextLevel();
+    void emptyScene();
     ~Game();
+
 public slots:
     void levelEnded();
 
