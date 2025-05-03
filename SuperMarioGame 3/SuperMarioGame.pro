@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     bullet.cpp \
+    cloud.cpp \
+    fallitem.cpp \
     game.cpp \
     main.cpp \
     mario.cpp \
@@ -19,6 +21,8 @@ SOURCES += \
 
 HEADERS += \
     bullet.h \
+    cloud.h \
+    fallitem.h \
     game.h \
     mario.h \
     monster.h \

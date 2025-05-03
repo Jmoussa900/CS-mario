@@ -42,7 +42,8 @@ void Bullet:: move()
             break;
             qDebug() << "Bullet hit something, deleting...";
         }
-        if(enemy->getHealth()<1){
+
+        if(enemy && enemy->getHealth() < 1){
 
             enemy->emit lifeEnded();
         }

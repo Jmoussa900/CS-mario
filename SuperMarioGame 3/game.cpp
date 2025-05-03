@@ -16,16 +16,22 @@ Game::Game(QWidget *parent){
     level=1;
     //created the player and put focus on it so the buttons can control it
     mario = new Mario();
+    //mario->TheInfo();
     mario->setMario(100,100);
     scene->addItem(mario);
     mario->setFlag(QGraphicsItem::ItemIsFocusable);
     mario->setFocus();
     mario->TheInfo();
+    Cloud* cloud = new Cloud();
+    scene->addItem(cloud);
     createObstacle(1);
     //created a timer that runs every 3000 millisecond to release the obstacles
     obstacleTimer = new QTimer();
+    disconnect(obstacleTimer, &QTimer::timeout, nullptr, nullptr);
     connect(obstacleTimer, &QTimer::timeout, this, [this]() {
         this->createObstacle(level);
+
+
     });
     obstacleTimer->start(3000);
 
@@ -36,12 +42,14 @@ Game::Game(QWidget *parent){
     connect(levelTimer, &QTimer::timeout, this, &Game::checkLevelCompletion);
     levelTimer->start(50000);
 
-    if(mario->getCollides()){
+    /*if(mario->getCollides()){
         scene->clear();
         QCoreApplication::quit();
         qApp->exit();
-    }
-    zoombie=new Monster();
+    }*/
+
+    zoombie = new Monster();
+    scene->addItem(zoombie);
     //zoombie->setPos(550, 300);
     //scene->addItem(zoombie);
     //zoombie->setZValue(10);
@@ -59,7 +67,8 @@ void Game::keyPressEvent(QKeyEvent *event) {
 void Game::endGame()
 {
     QMessageBox::information(nullptr,"END","Game Over!!! Try again later");
-    Game();
+    //Game();
+    qApp->quit();
 }
 
 
@@ -97,6 +106,7 @@ void Game::nextLevel()
 {
     QMessageBox::information(nullptr,"Congrtulations", "You have successfully finished Level "+ QString::number(level++) +" \nThe next Level will open now \n Score: "+QString::number(mario->getScore()));
     levelTimer->start(50000);//reset the timer for the next level
+    disconnect(obstacleTimer, &QTimer::timeout, nullptr, nullptr);
     connect(obstacleTimer, &QTimer::timeout, this, [this]() {
                             this->createObstacle(level);
                              });
@@ -107,5 +117,3 @@ Game::~Game()
     delete zoombie;
     delete mario;
 }
-
-

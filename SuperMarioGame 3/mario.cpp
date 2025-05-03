@@ -1,5 +1,5 @@
 #include "Mario.h"
-Mario::Mario(QGraphicsItem * parent) {
+Mario::Mario(QGraphicsItem * parent):info(nullptr) {
     width=100;
     height=100;
     pos_y=400;
@@ -13,7 +13,7 @@ Mario::Mario(QGraphicsItem * parent) {
     connect(timer, &QTimer::timeout, this, &Mario::updatePosition);
     timer->start(25);  }
 
-void Mario::TheInfo(){    //Function that provides all of the info about mario
+/*void Mario::TheInfo(){    //Function that provides all of the info about mario
     if(info){
         scene()->removeItem(info);
         delete info;
@@ -24,7 +24,30 @@ void Mario::TheInfo(){    //Function that provides all of the info about mario
     info->setPlainText("Health: "+QString::number(health)+ "   Life: "+QString::number(maxLife)+"   Level: 1"+"   Score: "+QString::number(score));
     info->setPos(350,50);
     scene()->addItem(info);
+}*/
+void Mario::TheInfo() {
+    if (info) {
+        if (scene()) scene()->removeItem(info);
+        delete info;
+        info = nullptr;
+    }
+
+    info = new QGraphicsTextItem;
+    info->setFont(QFont("times", 25));
+    info->setDefaultTextColor(Qt::black);
+    info->setPlainText("Health: " + QString::number(health) +
+                       "   Life: " + QString::number(maxLife) +
+                       "   Level: 1" +
+                       "   Score: " + QString::number(score));
+    info->setPos(350, 50);
+
+    if (scene()) {
+        scene()->addItem(info);
+    } else {
+        qDebug() << "Warning: Mario::TheInfo() called before Mario was added to a scene.";
+    }
 }
+
 
 void Mario::setMario(int w, int h) //function that creates and changes the size of mario
 {

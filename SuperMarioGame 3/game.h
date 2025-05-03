@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <iostream>
+#include "cloud.h"
 using namespace std;
 class Game:public QGraphicsView{
     Q_OBJECT
@@ -33,6 +34,7 @@ private:
     QTimer* levelTimer;
     QTimer * obstacleTimer;
     Monster * zoombie=nullptr;
+    Cloud* cloud;
 
 };
 #endif // GAME_H

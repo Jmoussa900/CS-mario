@@ -20,11 +20,25 @@ Monster::Monster(QGraphicsItem* parent) {
 
 }
 
-void Monster::shoot()
+/*void Monster::shoot()
 {
     Bullet* bullet = new Bullet();
     int x= 370 +rand()%101;
     bullet->setPos(500, x);
-    scene()->addItem(bullet);
+    //scene()->addItem(bullet);
 
+}*/
+void Monster::shoot()
+{
+    Bullet* bullet = new Bullet();
+    int x = 370 + rand() % 101;
+    bullet->setPos(500, x);
+
+    if (scene()) {
+        scene()->addItem(bullet);
+    } else {
+        qDebug() << "Error: Monster::shoot() called but Monster is not in a scene.";
+        delete bullet;  // Prevent memory leak
+    }
 }
+
