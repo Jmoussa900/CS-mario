@@ -1,6 +1,6 @@
 #ifndef STARTPAGE_H
 #define STARTPAGE_H
-#include <game.h>
+#include "game.h"
 #include <QMainWindow>
 
 namespace Ui {

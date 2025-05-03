@@ -16,10 +16,15 @@ RecObstacles::RecObstacles(QGraphicsItem* parent) {
     setPos(800,455);
 
     //   Moving the obstacle to the left automatically every 20 milli second
-    QTimer * timer = new QTimer();
+   QTimer * timer = new QTimer();
     connect(timer, SIGNAL(timeout()),this,SLOT (move()));
     timer->start(20);
 }
+
+//void RecObstacles::stop()
+//{
+  //  timer->stop();
+//}
 
 // Function move: move the obstacle from right to left until it gets out of frame it is deleted
 /*void RecObstacles:: move()
@@ -41,4 +46,5 @@ void RecObstacles::move() {
         delete this;
     }
 }
+
 
